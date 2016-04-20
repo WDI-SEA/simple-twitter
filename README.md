@@ -62,4 +62,137 @@ git add -A
 git commit -m "simple server set up"
 ```
 
-## 
+## Creating A Layout 
+
+Create a directory to contain our views and another directory to contain
+static files, like CSS and JavaScript. Prepare these files:
+
+```
+mkdir views
+touch views/layout.ejs
+touch views/nav.ejs
+touch views/index.ejs
+
+mkdir static
+touch static/style.css
+touch static/main.js
+```
+
+Set the view engine of our app to ejs, configure the app middleware to
+use `express-ejs-layouts`, and to serve the static directory properly:
+
+```
+var express = require('express');
+var ejsLayouts = require('express-ejs-layouts');
+
+var app = express();
+app.set('view engine', 'ejs');
+app.use(ejsLayouts);
+app.use(express.static(__dirname + '/static'));
+```
+
+Copy and paste these basic contents into each file:
+
+views/layout.ejs:
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Twitter</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <% include nav %>
+      <%- body %>
+    </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+  </body>
+</html>  
+
+```
+
+views/nav.ejs
+```
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Twitter</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="/">Home</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<form method="GET" action="#" class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<input name="q" type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div>
+</nav>
+```
+
+views/index.ejs
+```
+<h1>Welcome to Twitter</h1>
+<div class="row">
+  <div class="col-xs-12">
+    Sign up for an account, log in, or simply browse the firehose.
+    And remember, 1 + 1 = <%= 1 + 1 %>
+  </div>
+</div>
+```
+
+static/style.css
+```
+body {
+  background-color: lightblue;
+  height: 100%;
+}
+
+.container {
+  background-color: white;
+  min-height: 100%;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+```
+
+static/main.js
+```
+console.log('twitter');
+```
+
+Run the app and make sure everything is working.
+- check CSS: is the background of the page lightblue?
+- check JS: is 'twitter' logged to the developer console?
+- check ejs: does the index page use ejs to properly compute 1 + 1?
+- check nav: does the nav bar appear at the top of the page?
+
+If everything is working then it's time to make our second commit!
+Run `git status` to see what file have changed.
+
+```
+git status
+git add -A
+git commit -m "building basic page structure"
+
+```
