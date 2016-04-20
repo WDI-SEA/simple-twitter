@@ -196,3 +196,66 @@ git add -A
 git commit -m "building basic page structure"
 
 ```
+
+## Adding Users
+Before we start creating posts, let's create a way for users to sign
+up for the site and log in to their accounts.
+
+First, let's add username, password, login inputs to our nav bar on the
+righthand side. Replace the search bar that's already there.
+
+inside views/nav.ejs:
+```
+  ...
+
+  <ul class="nav navbar-nav navbar-right">
+    <form method="POST" action="/auth/login" class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input name="username" type="text" class="form-control" placeholder="username">
+        <input name="password" type="password" class="form-control" placeholder="password">
+      </div>
+      <button type="submit" class="btn btn-default">Log In</button>
+    </form>
+  </ul> 
+
+  ...
+```
+
+Second, let's create a sign up link off the home page. Replace the words "sign up"
+in index.ejs with a link:
+
+```
+<a href="/auth/signup">Sign up</a>
+```
+
+Create a template for a sign up page. Be sure to set the form's attributes
+`method` and `action` or else the form won't know where to submit it's
+information! Use an input with type='submit' to create a button that
+will submit the form.
+
+views/signup.ejs:
+```
+<h1>Sign Up For A New Account</h1>
+<form method="PUT" action="/auth/signup">
+  <input type="text" name="username">
+  <input type="password" name="password">
+  <input type="submit" value="Sign Up">
+</form>
+
+```
+
+Add a routes to index.js to serve the sign up form when users GET the page,
+and to process names and values of the form when data is PUT to the server.
+
+index.js:
+```
+app.get('/auth/signup', function(req, res) {
+  res.render('signup');
+});
+
+app.put('/auth/signup', function(req, res) {
+  // just return all of the form data to the client for now.
+  res.send(req.body);
+});
+```
+
